@@ -11,7 +11,6 @@ const createPayment = catchAsyncError(async (req, res, next) => {
     if (booking.status === 'cancelled') return next(new AppError('cannot pay for cancelled booking', 400))
     let payment = await paymentModel.findOne({ booking: booking._id })
     if (payment) return next(new AppError('payment already exists', 409))
-        
     let response = await fetch(`${process.env.PAYMOB_BASE_URL}/v1/intention/`, {
         method: 'POST',
         headers: {
@@ -24,6 +23,7 @@ const createPayment = catchAsyncError(async (req, res, next) => {
             payment_methods: [
                 Number(process.env.PAYMOB_INTEGRATION_ID)
             ],
+            special_reference: booking._id.toString(),
             billing_data: {
                 first_name: req.user.name,
                 last_name: req.user.name,
@@ -39,15 +39,17 @@ const createPayment = catchAsyncError(async (req, res, next) => {
                 state: 'NA',
                 country: 'EG'
             },
-            special_reference: booking._id.toString(),
             notification_url: `${process.env.BASE_URL}/api/v1/payment/webhook`,
             redirection_url: `${process.env.BASE_URL}/api/v1/payment/success`
         })
     })
-    let data = await response.json()
+    let responseText = await response.text()
+    let data = JSON.parse(responseText)
     if (!response.ok) return next(new AppError(data.detail || data.message || 'failed to create payment', 400))
-    payment = await new paymentModel({ booking: booking._id, method: 'card' }).save()
-
+    payment = await new paymentModel({
+        booking: booking._id,
+        method: 'card'
+    }).save()
     let checkoutUrl = `${process.env.PAYMOB_BASE_URL}/unifiedcheckout/?publicKey=${process.env.PAYMOB_PUBLIC_KEY}&clientSecret=${data.client_secret}`
     res.status(200).json({ message: 'success', checkoutUrl })
 })
