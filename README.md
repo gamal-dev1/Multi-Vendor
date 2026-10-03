@@ -1,38 +1,27 @@
 # Multi-Vendor Booking & Reservation API
 
-A scalable backend API for a **Multi-Vendor Booking & Reservation platform** built with **Node.js, Express.js, and MongoDB**, supporting vendor-based services, time-slot booking, secure payments, role-based access control, and customer reviews.
+A backend RESTful API for a **Multi-Vendor Booking & Reservation platform** built with **Node.js, Express.js, and MongoDB**.
+
+The system allows customers to discover vendors, book services through available time slots, make online payments, and submit reviews.
 
 **Live Server:** https://multi-vendor-production.up.railway.app/
 
----
+## Features
 
-## Key Features
-
-* **Authentication & RBAC:** JWT-based authentication with role-specific permissions for **Customer, Owner, and Admin**.
-
-* **Multi-Vendor Management:** Vendors can manage their own businesses, services, working hours, and available booking slots.
-
-* **Service & Slot Management:** Vendors can create services and generate available time slots based on service duration and scheduling.
-
-* **Booking Management:** Customers can book available service slots, view their bookings, and cancel bookings when needed, with cancelled slots becoming available again.
-
-* **Secure Online Payments:** **Paymob** integration for card payments with webhook-based payment confirmation.
-
-* **Payment Management:** Booking-based payment records supporting **cash and card** payment methods.
-
-* **Customer Reviews:** Customers can review services after completing a booking, with rating and comment support and prevention of duplicate reviews for the same service.
-
-* **API Query Features:** Reusable **pagination, filtering, sorting, field selection, and keyword search** for supported collection endpoints.
-
-* **Validation & Error Handling:** Joi validation, reusable middleware, async error handling, custom application errors, and centralized error management.
+* **Authentication & Authorization:** JWT authentication with role-based access control for Customer, Owner, and Admin.
+* **Vendor Management:** Owners can manage their businesses, working hours, services, and booking slots.
+* **Service & Slot Management:** Services with configurable duration, pricing, and automatically generated time slots.
+* **Booking System:** Customers can book available slots, view their bookings, and cancel bookings.
+* **Online Payments:** Paymob integration with Unified Checkout and webhook-based payment confirmation.
+* **Reviews:** Customers can rate and review services with duplicate-review prevention.
+* **API Query Features:** Pagination, filtering, sorting, field selection, and keyword search.
+* **Validation & Error Handling:** Joi validation, reusable middleware, async error handling, and centralized error management.
 
 ## User Roles
 
-* **Customer:** Browses vendors and services, views available slots, creates and cancels bookings, manages payments, and submits reviews for completed services.
-
-* **Owner:** Manages owned vendors, services, slots, and accesses bookings related to their vendors.
-
-* **Admin:** Has access to system-wide administrative operations and all bookings.
+* **Customer:** Browse vendors and services, book slots, manage payments, and submit reviews.
+* **Owner:** Manage owned vendors, services, working hours, slots, and related bookings.
+* **Admin:** Manage system-wide resources and access administrative operations.
 
 ## Booking Flow
 
@@ -52,83 +41,45 @@ Payment
 Review
 ```
 
-## Tech Stack & Architecture
+## Tech Stack
 
-* **Backend:** Node.js, Express.js
-
-* **Database:** MongoDB, Mongoose
-
-* **Authentication:** JWT, bcrypt
-
-* **Validation:** Joi
-
-* **Payments:** Paymob API, Webhooks
-
-* **Architecture:** Modular MVC, reusable middleware, centralized error handling, and reusable API feature utilities.
-
-* **Query Utilities:** Pagination, filtering, sorting, field selection, and keyword search.
+* **Node.js**
+* **Express.js**
+* **MongoDB / Mongoose**
+* **JWT / bcrypt**
+* **Joi**
+* **Paymob API & Webhooks**
+* **Postman**
+* **Railway**
 
 ## API Documentation
 
-**Postman Collection:** 
-[View Postman Documentation](https://documenter.getpostman.com/view/52617149/2sBYB1PUTR)
+**Postman Collection:**
+https://documenter.getpostman.com/view/52617149/2sBYB1PUTR
 
-The API documentation contains the available endpoints, request examples, authentication requirements, and supported API operations.
-
-
+The documentation includes available endpoints, authentication requirements, request examples, and API operations.
 
 ## API Query Examples
 
-The API supports reusable query features on supported collection endpoints.
-
-**Pagination**
+Supported collection endpoints provide reusable query features:
 
 ```text
 ?page=2
-```
-
-**Filtering**
-
-```text
 ?price[gte]=500
-```
-
-**Sorting**
-
-```text
 ?sort=-price
-```
-
-**Field Selection**
-
-```text
 ?fields=title,price
-```
-
-**Keyword Search**
-
-```text
 ?keyword=doctor
 ```
 
-Multiple query features can be combined when supported by the endpoint.
+Multiple query parameters can be combined where supported.
 
+## Security
 
-## Error Handling
-
-The API uses centralized error handling with reusable asynchronous error handling and custom application errors to provide consistent API responses.
-
-## Security & Authorization
-
-* JWT-based authentication
+* JWT authentication
 * Password hashing with bcrypt
 * Role-based authorization
-* Protected resources
-* Owner-based access control
-* Customer booking ownership checks
-* Payment ownership validation
+* Owner-based resource access
+* Booking and payment ownership checks
 * Joi request validation
-* Paymob webhook verification
-
-
-```
+* Paymob webhook HMAC verification
+ 
