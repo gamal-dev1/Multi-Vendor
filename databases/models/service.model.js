@@ -32,7 +32,7 @@ const serviceSchema = mongoose.Schema({
 serviceSchema.index({ vendor: 1 })
 
 serviceSchema.pre(/^find/, function () {
-    this.populate('vendor', 'businessName category -_id')
+    this.populate('vendor', 'businessName category')
 })
 
 export const serviceModel = mongoose.model('service', serviceSchema)

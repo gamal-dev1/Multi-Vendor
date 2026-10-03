@@ -10,7 +10,7 @@ const generateServiceSlots = catchAsyncError(async (req, res, next) => {
     const { service, date } = req.body
     let serviceData = await serviceModel.findById(service)
     if (!serviceData) return next(new AppError('service not found', 404))
-    let vendor = await vendorModel.findOne({ _id: serviceData.vendor, owner: req.user._id })
+    let vendor = await vendorModel.findOne({ _id: serviceData.vendor._id, owner: req.user._id })
     if (!vendor) return next(new AppError('not authorized', 403))
     const dayName = new Date(date).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
     const workingDay = vendor.workingHours[dayName]
