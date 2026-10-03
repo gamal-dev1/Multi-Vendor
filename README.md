@@ -2,7 +2,7 @@
 
 A scalable backend API for a **Multi-Vendor Booking & Reservation platform** built with **Node.js, Express.js, and MongoDB**, supporting vendor-based services, time-slot booking, secure payments, role-based access control, and customer reviews.
 
-**Live Server:** `YOUR_LIVE_SERVER_URL`
+**Live Server:** `https://multi-vendor-production.up.railway.app/`
 
 ---
 
@@ -70,7 +70,7 @@ Review
 
 ## API Documentation
 
-**Postman Collection:** `YOUR_POSTMAN_DOCUMENTATION_URL`
+**Postman Collection:** `https://documenter.getpostman.com/view/52617149/2sBYB1PUTR`
 
 The API documentation contains the available endpoints, request examples, authentication requirements, and supported API operations.
 
