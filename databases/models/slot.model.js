@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 
 const slotSchema = mongoose.Schema({
-
     service: {
         type: mongoose.Types.ObjectId,
         ref: 'service',
