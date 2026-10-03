@@ -11,6 +11,7 @@ const createPayment = catchAsyncError(async (req, res, next) => {
     if (booking.status === 'cancelled') return next(new AppError('cannot pay for cancelled booking', 400))
     let payment = await paymentModel.findOne({ booking: booking._id })
     if (payment) return next(new AppError('payment already exists', 409))
+    let amount = Math.round(booking.totalPrice * 100)
     let response = await fetch(`${process.env.PAYMOB_BASE_URL}/v1/intention/`, {
         method: 'POST',
         headers: {
@@ -18,12 +19,19 @@ const createPayment = catchAsyncError(async (req, res, next) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            amount: Math.round(booking.totalPrice * 100),
+            amount,
             currency: 'EGP',
             payment_methods: [
                 Number(process.env.PAYMOB_INTEGRATION_ID)
             ],
-            special_reference: booking._id.toString(),
+            items: [
+                {
+                    name: booking.service.title,
+                    amount,
+                    description: `Booking for ${booking.service.title}`,
+                    quantity: 1
+                }
+            ],
             billing_data: {
                 first_name: req.user.name,
                 last_name: req.user.name,
@@ -39,13 +47,16 @@ const createPayment = catchAsyncError(async (req, res, next) => {
                 state: 'NA',
                 country: 'EG'
             },
+            special_reference: booking._id.toString(),
             notification_url: `${process.env.BASE_URL}/api/v1/payment/webhook`,
             redirection_url: `${process.env.BASE_URL}/api/v1/payment/success`
         })
     })
     let responseText = await response.text()
+    if (!response.ok) {
+        return next(new AppError(`Paymob error ${response.status}: ${responseText}`, 400))
+    }
     let data = JSON.parse(responseText)
-    if (!response.ok) return next(new AppError(data.detail || data.message || 'failed to create payment', 400))
     payment = await new paymentModel({
         booking: booking._id,
         method: 'card'
