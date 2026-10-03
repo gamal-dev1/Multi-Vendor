@@ -6,12 +6,12 @@ import { AppError } from "../../../utils/AppError.js"
 import { vendorModel } from '../../../../databases/models/vendor.model.js'
 
 const createPayment = catchAsyncError(async (req, res, next) => {
-    let booking = await bookingModel.findOne({ _id: req.body.booking,user: req.user._id})
+    let booking = await bookingModel.findOne({ _id: req.body.booking, user: req.user._id }).populate('service', 'title')
     if (!booking) return next(new AppError('booking not found', 404))
-    if (booking.status === 'cancelled')return next(new AppError('cannot pay for cancelled booking', 400))
+    if (booking.status === 'cancelled') return next(new AppError('cannot pay for cancelled booking', 400))
     let payment = await paymentModel.findOne({ booking: booking._id })
     if (payment) return next(new AppError('payment already exists', 409))
-
+        
     let response = await fetch(`${process.env.PAYMOB_BASE_URL}/v1/intention/`, {
         method: 'POST',
         headers: {
