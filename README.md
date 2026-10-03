@@ -43,7 +43,7 @@ Review
 
 ## Tech Stack
 
-* **Node.js**
+* **Node.js 24.13.1**
 * **Express.js**
 * **MongoDB / Mongoose**
 * **JWT / bcrypt**
@@ -52,10 +52,52 @@ Review
 * **Postman**
 * **Railway**
 
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/gamal-dev1/Multi-Vendor
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a .env file based on the environment variables listed below.
+
+Start the server:
+
+```bash
+npm start
+```
+
+## Environment Variables
+
+Create a `.env` file using the variables below.
+
+```env
+# DB_CONNECTION=mongodb://localhost:27017/multi-vendor
+DB_ONLINE=
+ROUND=
+JWT_KEY=
+PAYMOB_BASE_URL=https://accept.paymob.com
+PAYMOB_INTEGRATION_ID=
+PAYMOB_SECRET_KEY=
+PAYMOB_PUBLIC_KEY=
+PAYMOB_HMAC_SECRET=
+BASE_URL=
+```
+
+> Payments run in **Paymob test mode**.
+
+
 ## API Documentation
 
 **Postman Collection:**
-https://documenter.getpostman.com/view/52617149/2sBYB1PUTR
+[View Postman Documentation](https://documenter.getpostman.com/view/52617149/2sBYB1PUTR)
 
 The documentation includes available endpoints, authentication requirements, request examples, and API operations.
 
@@ -82,4 +124,3 @@ Multiple query parameters can be combined where supported.
 * Booking and payment ownership checks
 * Joi request validation
 * Paymob webhook HMAC verification
- 
