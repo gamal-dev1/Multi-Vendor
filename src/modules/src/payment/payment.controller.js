@@ -24,14 +24,6 @@ const createPayment = catchAsyncError(async (req, res, next) => {
             payment_methods: [
                 Number(process.env.PAYMOB_INTEGRATION_ID)
             ],
-            items: [
-                {
-                    name: booking.service.title,
-                    amount: Math.round(booking.totalPrice * 100),
-                    description: `Booking for ${booking.service.title}`,
-                    quantity: 1
-                }
-            ],
             billing_data: {
                 first_name: req.user.name,
                 last_name: req.user.name,
