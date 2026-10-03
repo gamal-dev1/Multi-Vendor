@@ -53,16 +53,11 @@ const createPayment = catchAsyncError(async (req, res, next) => {
         })
     })
     let responseText = await response.text()
-    if (!response.ok) {
-        return next(new AppError(`Paymob error ${response.status}: ${responseText}`, 400))
-    }
+    if (!response.ok) { return next(new AppError(`Paymob error ${response.status}: ${responseText}`, 400)) }
     let data = JSON.parse(responseText)
-    payment = await new paymentModel({
-        booking: booking._id,
-        method: 'card'
-    }).save()
+    payment = await new paymentModel({ booking: booking._id, method: 'card' }).save()
     let checkoutUrl = `${process.env.PAYMOB_BASE_URL}/unifiedcheckout/?publicKey=${process.env.PAYMOB_PUBLIC_KEY}&clientSecret=${data.client_secret}`
-    res.status(200).json({ message: 'success', checkoutUrl })
+    res.status(200).json({ message: 'success', paymentId: payment._id, checkoutUrl })
 })
 
 const paymentWebhook = catchAsyncError(async (req, res) => {
