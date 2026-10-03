@@ -10,7 +10,7 @@ const createPayment = catchAsyncError(async (req, res, next) => {
     if (!booking) return next(new AppError('booking not found', 404))
     if (booking.status === 'cancelled') return next(new AppError('cannot pay for cancelled booking', 400))
     let payment = await paymentModel.findOne({ booking: booking._id })
-    if (payment) return next(new AppError('payment already exists', 409))
+    if (payment && payment.paidAt) return next(new AppError('booking already paid', 409))
     let amount = Math.round(booking.totalPrice * 100)
     let response = await fetch(`${process.env.PAYMOB_BASE_URL}/v1/intention/`, {
         method: 'POST',
@@ -55,7 +55,7 @@ const createPayment = catchAsyncError(async (req, res, next) => {
     let responseText = await response.text()
     if (!response.ok) { return next(new AppError(`Paymob error ${response.status}: ${responseText}`, 400)) }
     let data = JSON.parse(responseText)
-    payment = await new paymentModel({ booking: booking._id, method: 'card' }).save()
+    if (!payment) {payment = await new paymentModel({ booking: booking._id, method: 'card' }).save()}
     let checkoutUrl = `${process.env.PAYMOB_BASE_URL}/unifiedcheckout/?publicKey=${process.env.PAYMOB_PUBLIC_KEY}&clientSecret=${data.client_secret}`
     res.status(200).json({ message: 'success', paymentId: payment._id, checkoutUrl })
 })
