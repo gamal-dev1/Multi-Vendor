@@ -19,7 +19,7 @@ const slotSchema = mongoose.Schema({
 }, { timestamps: true })
 
 slotSchema.pre(/^find/, function () {
-    this.populate('service', 'title price duration vendor -_id')
+    this.populate('service', 'title price duration vendor')
 })
 
 export const slotModel = mongoose.model('slot', slotSchema)

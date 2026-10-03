@@ -14,7 +14,7 @@ const createBooking = catchAsyncError(async (req, res, next) => {
     let slot = await slotModel.findById(slotId)
     if (!slot) return next(new AppError('slot not found', 404))
 
-    if (!slot.service.equals(service._id))
+    if (!slot.service._id.equals(service._id))
         return next(new AppError('slot does not belong to this service', 400))
 
     if (await bookingModel.findOne({ slot: slot._id, status: { $ne: 'cancelled' } }))
