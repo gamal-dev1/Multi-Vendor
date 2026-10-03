@@ -48,8 +48,8 @@ const createPayment = catchAsyncError(async (req, res, next) => {
                 country: 'EG'
             },
             special_reference: booking._id.toString(),
-            notification_url: `${process.env.BASE_URL}/api/v1/payment/webhook`,
-            redirection_url: `${process.env.BASE_URL}/api/v1/payment/success`
+            notification_url: `${process.env.BASE_URL}/api/payment/webhook`,
+            redirection_url: `${process.env.BASE_URL}/api/payment/success`
         })
     })
     let responseText = await response.text()
